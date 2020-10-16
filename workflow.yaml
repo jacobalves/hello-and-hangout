@@ -1,0 +1,45 @@
+# Workflow API version
+apiVersion: io.orquestra.workflow/1.0.0
+
+# Prefix for workflow ID
+name: hello-and-hangout
+
+# List components needed by workflow.
+imports:
+
+# A component named `welcome-to-orquestra` that is a public git repo. All the fields here are required except branch, which defaults to master.
+- name: hello-and-hangout
+  type: git
+  parameters:
+    repository: "git@github.com:jacobalves/hello-and-hangout.git"
+    branch: "master"
+
+steps:
+
+# This step runs the `hello` function in the `hello-and-hangout` component
+- name: hello
+  config:
+    runtime:
+      language: python3
+      imports: [hello-and-hangout]
+      parameters:
+        file: hello-and-hangout/main.py
+        function: hello
+  outputs:
+  - name: hello
+    type: message
+- name: hangout
+  config:
+    runtime:
+      language: python3
+      imports: [hello-and-hangout]
+      parameters:
+        file: hello-and-hangout/main.py
+        function: hangout
+  inputs:
+    # wait for 10 minutes
+    - duration: 600
+      type: int
+
+types:
+- message
