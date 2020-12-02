@@ -26,8 +26,8 @@ steps:
         file: hello-and-hangout/main.py
         function: hello
   outputs:
-  - name: hello
-    type: message
+    - name: hello
+      type: message
 - name: hangout
   config:
     runtime:
@@ -38,8 +38,20 @@ steps:
         function: hangout
   inputs:
     # wait for 10 minutes
-    - duration: 600
+    - duration: 300 
       type: int
+- name: os-variables
+  config:
+    runtime:
+      language: python3
+      imports: [hello-and-hangout]
+      parameters:
+        file: hello-and-hangout/main.py
+        function: environment_variables
+  outputs:
+    - name: envvars
+      type: envvariables
 
 types:
 - message
+- envvariables
