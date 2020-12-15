@@ -27,10 +27,7 @@ def translate(messagedata, lang):
         data_dict = json.load(f)
     message = TextBlob(data_dict["message"])
     message_dict = {}
-    if lang == 'en':
-        message_dict["message"] = message.string
-    else:
-        message_dict["message"] = message.translate(to=lang).string
+    message_dict["message"] = message.translate(to=lang).string
     message_dict["schema"] = "message"
     with open("translated.json",'w') as f:
         f.write(json.dumps(message_dict, indent=2)) #
