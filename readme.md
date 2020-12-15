@@ -1,0 +1,1 @@
+cat value.json | jinja2 workflow.yaml > runworkflow.yaml

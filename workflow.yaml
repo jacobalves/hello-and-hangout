@@ -28,6 +28,44 @@ steps:
   outputs:
     - name: hello
       type: message
+{% for l in lang %}
+- name: translate-{{ loop.index }}
+  passed: [hello]
+  config:
+    runtime:
+      language: python3
+      imports: [hello-and-hangout]
+      parameters:
+        file: hello-and-hangout/main.py
+        function: translate
+  inputs:
+    - messagedata: ((hello.hello))
+      type: message
+    - lang: {{l}}
+      type: string
+  outputs:
+    - name: translated
+      type: message
+{% endfor %}
+{% for l in lang %}
+- name: back-to-english-{{ loop.index }}
+  passed: [translate-{{ loop.index }}]
+  config:
+    runtime:
+      language: python3
+      imports: [hello-and-hangout]
+      parameters:
+        file: hello-and-hangout/main.py
+        function: translate
+  inputs:
+    - messagedata: ((translate-{{ loop.index }}.translated))
+      type: message
+    - lang: en
+      type: string
+  outputs:
+    - name: translated
+      type: message
+{% endfor %}
 # - name: hangout
 #   config:
 #     runtime:
@@ -51,23 +89,6 @@ steps:
 #   outputs:
 #     - name: envvars
 #       type: envvariables
-- name: translate
-  config:
-    runtime:
-      language: python3
-      imports: [hello-and-hangout]
-      parameters:
-        file: hello-and-hangout/main.py
-        function: translate
-  inputs:
-    - messagedata: ((hello.hello))
-      type: message
-    - lang: zh
-      type: string
-  outputs:
-    - name: translate
-      type: message
-
 
 types:
 - message
