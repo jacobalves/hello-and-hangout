@@ -6,6 +6,8 @@ from time import sleep
 import json
 import os
 
+from textblob import TextBlob
+
 def hello():
     message = "Hello from Orquestra!"
 
@@ -18,6 +20,18 @@ def hello():
 
 def hangout(duration):
     sleep(duration)
+
+def hello-translate(lang):
+    message = TextBlob("Hello from Orquestra!")
+    message_dict = {}
+    if lang == 'en':
+        message_dict["message"] = message.string
+    else:
+        message_dict["message"] = message.translate(to=lang)
+    message_dict["schema"] = "message"
+
+    with open("hello.json",'w') as f:
+        f.write(json.dumps(message_dict, indent=2)) # Write message to file as this will serve as output artifact
 
 def environment_variables():
 
