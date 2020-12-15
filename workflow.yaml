@@ -28,29 +28,46 @@ steps:
   outputs:
     - name: hello
       type: message
-- name: hangout
+# - name: hangout
+#   config:
+#     runtime:
+#       language: python3
+#       imports: [hello-and-hangout]
+#       parameters:
+#         file: hello-and-hangout/main.py
+#         function: hangout
+#   inputs:
+#     # wait for 10 minutes
+#     - duration: 30 
+#       type: int
+# - name: os-variables
+#   config:
+#     runtime:
+#       language: python3
+#       imports: [hello-and-hangout]
+#       parameters:
+#         file: hello-and-hangout/main.py
+#         function: environment_variables
+#   outputs:
+#     - name: envvars
+#       type: envvariables
+- name: translate
   config:
     runtime:
       language: python3
       imports: [hello-and-hangout]
       parameters:
         file: hello-and-hangout/main.py
-        function: hangout
+        function: translate
   inputs:
-    # wait for 10 minutes
-    - duration: 300 
-      type: int
-- name: os-variables
-  config:
-    runtime:
-      language: python3
-      imports: [hello-and-hangout]
-      parameters:
-        file: hello-and-hangout/main.py
-        function: environment_variables
+    - messagedata: ((hello.hello))
+      type: message
+    - lang: zh
+      type: string
   outputs:
-    - name: envvars
-      type: envvariables
+    - name: translate
+      type: message
+
 
 types:
 - message
